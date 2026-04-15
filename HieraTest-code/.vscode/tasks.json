@@ -1,0 +1,10 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Implement symbol generator",
+			"type": "shell",
+			"command": "echo \"Start implementing symbol_table_generator\""
+		}
+	]
+}
