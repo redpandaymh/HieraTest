@@ -31,7 +31,7 @@
                 <version>2.1.1</version> 
                 <configuration>
                     <!-- Required: You must specify your OpenAI API keys. -->
-                    <apiKeys>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</apiKeys>
+                    <apiKeys></apiKeys>
                     <model>gpt-3.5-turbo</model>
                     <url>https://api.openai.com/v1/chat/completions</url>
                     <proxy>127.0.0.1:7890</proxy>
