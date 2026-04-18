@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.ZJU-ACES-ISE</groupId>
+            <artifactId>chatunitest-starter</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.zju-aces-ise</groupId>
+                <artifactId>chatunitest-maven-plugin</artifactId>
+                <!-- Required: Use the latest version -->
+                <version>2.1.1</version> 
+                <configuration>
+                    <!-- Required: You must specify your OpenAI API keys. -->
+                    <apiKeys>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</apiKeys>
+                    <model>gpt-3.5-turbo</model>
+                    <url>https://api.openai.com/v1/chat/completions</url>
+                    <proxy>127.0.0.1:7890</proxy>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

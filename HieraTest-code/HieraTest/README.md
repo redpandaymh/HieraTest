@@ -35,7 +35,7 @@
 进入到 `bugWhisper/check`文件夹下，调用`check_test_error.py`中的`main_test_wrapper`函数  
 
 ### 运行日志
-所有的日志记录都会输出到 BUILDING_DATA_AND_LOG_STORE_PATH属性所设置的目录下，以关键函数与时间戳作为文件名称。
+所有的日志记录都会输出到 BUILDING_DATA_AND_LOG_STORE_PATH 属性所设置的目录下，以关键函数与时间戳作为文件名称。
 
 ## 项目结构
 
