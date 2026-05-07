@@ -100,6 +100,7 @@ public class Config {
     public AtomicInteger sharedInteger = new AtomicInteger(0);
     public AtomicInteger jobCount = new AtomicInteger(0);
     public AtomicInteger completedJobCount = new AtomicInteger(0);
+    public AtomicInteger totalTokenCount = new AtomicInteger(0);
     public static Map<String, Map<String, String>> classMapping = new HashMap<>();
     public static Map<String, TreeSet<String>> objectConstructionCode = new HashMap<>();
     public static OCM ocm = new OCM();

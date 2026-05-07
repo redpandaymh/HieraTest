@@ -59,6 +59,9 @@ public class AskGPT {
                 }
                 if (response.body() == null) throw new IOException("Response body is null.");
                 ChatResponse chatResponse = GSON.fromJson(response.body().string(), ChatResponse.class);
+                if (chatResponse != null && chatResponse.getUsage() != null) {
+                    config.totalTokenCount.addAndGet(chatResponse.getUsage().getTotalTokens());
+                }
                 response.close();
                 return chatResponse;
             } catch (IOException e) {

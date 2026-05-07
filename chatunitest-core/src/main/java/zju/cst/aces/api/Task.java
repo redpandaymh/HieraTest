@@ -43,6 +43,7 @@ public class Task {
     }
 
     public void startMethodTask(String className, String methodName) throws IOException {
+        long startTime = System.currentTimeMillis();
         if(granularity == null){
             granularity = Granularity.METHOD;
         }
@@ -104,7 +105,8 @@ public class Task {
             return;
         }
 
-        log.info(String.format("\n==========================\n[%s] Generation finished", config.pluginSign));
+        long duration = System.currentTimeMillis() - startTime;
+        log.info(String.format("\n==========================\n[%s] Generation finished. Time consumed: %d ms, Total Tokens: %d", config.pluginSign, duration, config.totalTokenCount.get()));
 
         Path testOutPutPath = config.getTestOutput();
         classNameProcessor.processJavaFiles(testOutPutPath);
@@ -121,6 +123,7 @@ public class Task {
      * @throws IOException If an I/O error occurs
      */
     public void startMethodWithoutOverloadTask(String className, String methodName, String paramTypes) throws IOException {
+        long startTime = System.currentTimeMillis();
         if(granularity == null){
             granularity = Granularity.METHOD;
         }
@@ -203,7 +206,8 @@ public class Task {
             return;
         }
 
-        log.info(String.format("\n==========================\n[%s] Generation finished", config.pluginSign));
+        long duration = System.currentTimeMillis() - startTime;
+        log.info(String.format("\n==========================\n[%s] Generation finished. Time consumed: %d ms, Total Tokens: %d", config.pluginSign, duration, config.totalTokenCount.get()));
 
         Path testOutPutPath = config.getTestOutput();
         classNameProcessor.processJavaFiles(testOutPutPath);
@@ -211,6 +215,7 @@ public class Task {
     }
 
     public void startClassTask(String className) throws IOException {
+        long startTime = System.currentTimeMillis();
         if(granularity == null){
             granularity = Granularity.CLASS;
         }
@@ -232,7 +237,8 @@ public class Task {
         } catch (IOException e) {
             log.warn("Class not found: " + className + " in " + config.getProject().getArtifactId());
         }
-        log.info(String.format("\n==========================\n[%s] Generation finished",config.pluginSign));
+        long duration = System.currentTimeMillis() - startTime;
+        log.info(String.format("\n==========================\n[%s] Generation finished. Time consumed: %d ms, Total Tokens: %d",config.pluginSign, duration, config.totalTokenCount.get()));
 
         Path testOutPutPath = config.getTestOutput();
         classNameProcessor.processJavaFiles(testOutPutPath);
@@ -240,6 +246,7 @@ public class Task {
     }
 
     public void startProjectTask() throws IOException {
+        long startTime = System.currentTimeMillis();
         if(granularity == null){
             granularity = Granularity.PROJECT;
         }
@@ -286,7 +293,8 @@ public class Task {
             }
         }
 
-        log.info(String.format("\n==========================\n[%s] Generation finished",config.pluginSign));
+        long duration = System.currentTimeMillis() - startTime;
+        log.info(String.format("\n==========================\n[%s] Generation finished. Time consumed: %d ms, Total Tokens: %d",config.pluginSign, duration, config.totalTokenCount.get()));
 
         Path testOutPutPath = config.getTestOutput();
         classNameProcessor.processJavaFiles(testOutPutPath);
