@@ -84,6 +84,13 @@ public class Config {
     public Path examplePath;
     public Path symbolFramePath;
 
+    // Added for Dual-Model Judger
+    public boolean enableDualModelJudger;
+    public Model smallModel;
+    public String[] smallModelApiKeys;
+    public Model largeModel;
+    public String[] largeModelApiKeys;
+
     public int max_coverage_improve_time;
     public int sampleSize;
     public String proxy;
@@ -150,6 +157,14 @@ public class Config {
         public Path examplePath;
         public Path symbolFramePath;
         public String proxy = "null:-1";
+        
+        // Added for Dual-Model Judger
+        public boolean enableDualModelJudger = false; // Set to true to enable this feature
+        public Model smallModel;                      // Configured code position for small model (e.g., Model.GPT_3_5)
+        public String[] smallModelApiKeys;            // Configured API key location for small model
+        public Model largeModel;                      // Configured code position for large model (e.g., Model.GPT_4O)
+        public String[] largeModelApiKeys;            // Configured API key location for large model
+
         public String hostname = "null";
         public String port = "-1";
         public OkHttpClient client = new OkHttpClient.Builder()
@@ -226,6 +241,35 @@ public class Config {
             setProxy(proxy);
             return this;
         }
+        public ConfigBuilder enableDualModelJudger(boolean enableDualModelJudger) {
+            this.enableDualModelJudger = enableDualModelJudger;
+            return this;
+        }
+
+        public ConfigBuilder smallModel(String smallModel) {
+            if (smallModel != null && !smallModel.isEmpty()) {
+                this.smallModel = Model.fromString(smallModel);
+            }
+            return this;
+        }
+
+        public ConfigBuilder smallModelApiKeys(String[] smallModelApiKeys) {
+            this.smallModelApiKeys = smallModelApiKeys;
+            return this;
+        }
+
+        public ConfigBuilder largeModel(String largeModel) {
+            if (largeModel != null && !largeModel.isEmpty()) {
+                this.largeModel = Model.fromString(largeModel);
+            }
+            return this;
+        }
+
+        public ConfigBuilder largeModelApiKeys(String[] largeModelApiKeys) {
+            this.largeModelApiKeys = largeModelApiKeys;
+            return this;
+        }
+
         public ConfigBuilder max_coverage_improve_time(int max_coverage_improve_time){
             this.max_coverage_improve_time=max_coverage_improve_time;
             return this;
@@ -651,6 +695,14 @@ public class Config {
             config.setUseExtra(this.useExtra);
             config.setMax_coverage_improve_time(this.max_coverage_improve_time);
             config.setSampleSize(this.sampleSize);
+            
+            // Dual-Model Judger fields
+            config.setEnableDualModelJudger(this.enableDualModelJudger);
+            config.setSmallModel(this.smallModel);
+            config.setSmallModelApiKeys(this.smallModelApiKeys);
+            config.setLargeModel(this.largeModel);
+            config.setLargeModelApiKeys(this.largeModelApiKeys);
+
             return config;
         }
     }

@@ -54,7 +54,7 @@ public class TestGeneration {
             PromptInfo obfuscatedPromptInfo = new PromptInfo(promptInfo);
             obfuscator.obfuscatePromptInfo(obfuscatedPromptInfo);
             prompt = promptGenerator.generateMessages(obfuscatedPromptInfo,config.getPhaseType());
-            code = generateTest(prompt, record);
+            code = generateTest(prompt, record, promptInfo);
             if (!record.isHasCode()) {
                 promptInfo.setUnitTest("");
                 return;
@@ -62,7 +62,7 @@ public class TestGeneration {
             code = obfuscator.deobfuscateJava(code);
         } else {
             prompt = promptGenerator.generateMessages(promptInfo,config.getPhaseType());
-            code = generateTest(prompt, record);
+            code = generateTest(prompt, record, promptInfo);
             if (!record.isHasCode()) {
                 promptInfo.setUnitTest("");
                 return;
@@ -79,7 +79,7 @@ public class TestGeneration {
         record.setCode(code);
     }
 
-    public String generateTest(List<ChatMessage> prompt, RoundRecord record) {
+    public String generateTest(List<ChatMessage> prompt, RoundRecord record, PromptInfo promptInfo) {
 
         if (MethodRunner.isExceedMaxTokens(config.getMaxPromptTokens(), prompt)) {
             config.getLogger().error("Exceed max prompt tokens: " + methodInfo.methodName + " Skipped.");
@@ -89,7 +89,39 @@ public class TestGeneration {
         }
         config.getLogger().debug("[Prompt]:\n" + prompt);
 
-        ChatResponse response = ChatGenerator.chat(config, prompt);
+        zju.cst.aces.api.config.Model targetModel = config.getModel();
+        String[] targetApiKeys = config.getApiKeys();
+
+        if (config.isEnableDualModelJudger()) {
+            boolean isFirstRound = (promptInfo.getRound() != null && promptInfo.getRound() == 0);
+            boolean contextNotTooComplex = true;
+            if (methodInfo != null && methodInfo.sourceCode != null) {
+                // Heuristic for judger: if method lines > 50, consider it complex and use large model. Otherwise small model.
+                if (methodInfo.sourceCode.split("\n").length > 50) {
+                    contextNotTooComplex = false;
+                }
+            }
+
+            if (isFirstRound && contextNotTooComplex) {
+                if (config.getSmallModel() != null && config.getSmallModelApiKeys() != null) {
+                    targetModel = config.getSmallModel();
+                    targetApiKeys = config.getSmallModelApiKeys();
+                    config.getLogger().info("Judger: Using small model for round 0 test generation.");
+                }
+            } else {
+                if (config.getLargeModel() != null && config.getLargeModelApiKeys() != null) {
+                    targetModel = config.getLargeModel();
+                    targetApiKeys = config.getLargeModelApiKeys();
+                    if (!isFirstRound) {
+                        config.getLogger().info("Judger: Round > 0 (Repair/Feedback). Switching to large model.");
+                    } else {
+                        config.getLogger().info("Judger: Context too complex. Using large model for round 0 test generation.");
+                    }
+                }
+            }
+        }
+
+        ChatResponse response = ChatGenerator.chat(config, prompt, targetModel, targetApiKeys);
         String content = ChatGenerator.getContentByResponse(response);
         config.getLogger().debug("[Response]:\n" + content);
         String code = ChatGenerator.extractCodeByContent(content);

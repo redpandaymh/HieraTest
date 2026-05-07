@@ -383,6 +383,9 @@ public class ProjectParser {
         }
     }
     private static int parseJavaVersion(String versionStr) {
+        if (!versionStr.contains(".")) {
+            versionStr += ".0";
+        }
         String[] parts = versionStr.split("\\.");
         if (parts.length > 1) {
             try {

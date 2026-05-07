@@ -131,6 +131,20 @@ public class ProjectTestMojo
     public String module;
     @Parameter(alias = "prune", property = "prune", defaultValue = "false")
     public boolean enablePrune;
+    
+    // ======== Added Properties for Dual-Model Judger ========
+    @Parameter(property = "enableDualModelJudger", defaultValue = "false")
+    public boolean enableDualModelJudger;
+    @Parameter(property = "smallModel", defaultValue = "")
+    public String smallModel;
+    @Parameter(property = "smallModelApiKeys")
+    public String[] smallModelApiKeys;
+    @Parameter(property = "largeModel", defaultValue = "")
+    public String largeModel;
+    @Parameter(property = "largeModelApiKeys")
+    public String[] largeModelApiKeys;
+    // =======================================================
+    
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     @Component(hint = "default")
     public DependencyGraphBuilder dependencyGraphBuilder;
@@ -257,8 +271,12 @@ public class ProjectTestMojo
                 .proxy(proxy)
                 .phaseType(phaseType)
                 .sampleSize(sampleSize)
-                .module(module)
-                .enablePrune(enablePrune)
+                // Dual model judger info
+                .enableDualModelJudger(enableDualModelJudger)
+                .smallModel(smallModel)
+                .smallModelApiKeys(smallModelApiKeys)
+                .largeModel(largeModel)
+                .largeModelApiKeys(largeModelApiKeys)
                 .build();
 
         // SmartUnitTest generation is now handled in the execute method when phaseType is TELPA

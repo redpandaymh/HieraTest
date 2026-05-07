@@ -60,6 +60,22 @@ public enum Model {
             .withTemperature(0.5)
             .withFrequencyPenalty(0)
             .withPresencePenalty(0)
+            .build()),
+    QWEN_3_6_27B("qwen3.6-27b", new ModelConfig.Builder()
+            .withModelName("qwen3.6-27b")
+            .withUrl("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
+            .withContextLength(16385)
+            .withTemperature(0.5)
+            .withFrequencyPenalty(0)
+            .withPresencePenalty(0)
+            .build()),
+    QWEN_3_6_PLUS("qwen3.6-plus", new ModelConfig.Builder()
+            .withModelName("qwen3.6-plus")
+            .withUrl("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
+            .withContextLength(122880)
+            .withTemperature(0.5)
+            .withFrequencyPenalty(0)
+            .withPresencePenalty(0)
             .build());
 
     private final String modelName;

@@ -26,18 +26,18 @@ public class AskGPT {
     }
 
     public ChatResponse askChatGPT(List<ChatMessage> chatMessages) {
-        String apiKey = config.getRandomKey();
+        return askChatGPT(chatMessages, config.getModel(), config.getApiKeys());
+    }
+
+    public ChatResponse askChatGPT(List<ChatMessage> chatMessages, zju.cst.aces.api.config.Model model, String[] apiKeys) {
+        String apiKey = apiKeys[(int) (Math.random() * apiKeys.length)];
         int maxTry = 5;
         while (maxTry > 0) {
             Response response = null;
             try {
                 Map<String, Object> payload = new HashMap<>();
 
-//                if (Objects.equals(config.getModel(), "code-llama") || Objects.equals(config.getModel(), "code-llama-13B")) {
-//                    payload.put("max_tokens", 8092);
-//                }
-
-                ModelConfig modelConfig = config.getModel().getDefaultConfig();
+                ModelConfig modelConfig = model.getDefaultConfig();
 
                 payload.put("messages", chatMessages);
                 payload.put("model", modelConfig.getModelName());

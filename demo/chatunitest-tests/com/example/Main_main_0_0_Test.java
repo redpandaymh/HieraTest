@@ -12,19 +12,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class Main_main_0_0_Test {
 
     @Test
-    public void testMain() {
-        // Redirect System.out to capture the output
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        // Call the main method using reflection
+    void testMain() {
+        ByteArrayOutputStream capturedOutput = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
         try {
-            Main.class.getMethod("main", String[].class).invoke(null, (Object) new String[] {});
-        } catch (Exception e) {
-            e.printStackTrace();
+            System.setOut(new PrintStream(capturedOutput));
+            Main.main(new String[] {});
+            String output = capturedOutput.toString().trim();
+            assertTrue(output.contains("Hello world!"));
+        } finally {
+            System.setOut(originalOut);
         }
-        // Check if the output is correct
-        assertEquals("Hello world!\n", outContent.toString());
-        // Reset System.out
-        System.setOut(System.out);
     }
 }

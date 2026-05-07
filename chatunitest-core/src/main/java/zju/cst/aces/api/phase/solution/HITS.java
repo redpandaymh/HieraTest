@@ -97,7 +97,7 @@ public class HITS extends PhaseImpl {
                 PromptInfo obfuscatedPromptInfo = new PromptInfo(promptInfo);
                 obfuscator.obfuscatePromptInfo(obfuscatedPromptInfo);
                 prompt = promptGenerator.generateMessages(obfuscatedPromptInfo, "HITS");
-                code = generateTest(prompt, record);
+                code = generateTest(prompt, record, promptInfo);
                 if (!record.isHasCode()) {
                     promptInfo.setUnitTest("");
                     return;
@@ -105,7 +105,7 @@ public class HITS extends PhaseImpl {
                 code = obfuscator.deobfuscateJava(code);
             } else {
                 prompt = promptGenerator.generateMessages(promptInfo, "HITS");
-                code = generateTest(prompt, record);
+                code = generateTest(prompt, record, promptInfo);
                 if (!record.isHasCode()) {
                     promptInfo.setUnitTest("");
                     return;

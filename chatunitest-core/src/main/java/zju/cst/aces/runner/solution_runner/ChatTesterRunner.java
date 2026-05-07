@@ -167,7 +167,7 @@ public class ChatTesterRunner extends MethodRunner {
             }
 
             // start generate test
-            String code = generateTest(prompt, record);
+            String code = generateTest(prompt, record, promptInfo);
             if (!record.isHasCode()) {
                 continue;
             }
@@ -194,7 +194,7 @@ public class ChatTesterRunner extends MethodRunner {
         return false;
     }
 
-    public String generateTest(List<ChatMessage> prompt, RoundRecord record) {
+    public String generateTest(List<ChatMessage> prompt, RoundRecord record, PromptInfo promptInfo) {
 
         if (MethodRunner.isExceedMaxTokens(config.getMaxPromptTokens(), prompt)) {
             config.getLogger().error("Exceed max prompt tokens: " + methodInfo.methodName + " Skipped.");
@@ -204,8 +204,34 @@ public class ChatTesterRunner extends MethodRunner {
         }
         config.getLogger().debug("[Prompt]:\n" + prompt);
 
-        ChatResponse response = ChatGenerator.chat(config, prompt);
-        String content = ChatGenerator.getContentByResponse(response);
+        zju.cst.aces.api.config.Model targetModel = config.getModel();
+        String[] targetApiKeys = config.getApiKeys();
+
+        if (config.isEnableDualModelJudger()) {
+            boolean isFirstRound = (promptInfo.getRound() != null && promptInfo.getRound() == 0);
+            boolean contextNotTooComplex = true;
+            if (methodInfo != null && methodInfo.sourceCode != null) {
+                if (methodInfo.sourceCode.split("\n").length > 50) {
+                    contextNotTooComplex = false;
+                }
+            }
+
+            if (isFirstRound && contextNotTooComplex) {
+                if (config.getSmallModel() != null && config.getSmallModelApiKeys() != null) {
+                    targetModel = config.getSmallModel();
+                    targetApiKeys = config.getSmallModelApiKeys();
+                    config.getLogger().info("Judger: Using small model for round 0 test generation in ChatTester.");
+                }
+            } else {
+                if (config.getLargeModel() != null && config.getLargeModelApiKeys() != null) {
+                    targetModel = config.getLargeModel();
+                    targetApiKeys = config.getLargeModelApiKeys();
+                }
+            }
+        }
+
+        ChatResponse response = zju.cst.aces.api.impl.ChatGenerator.chat(config, prompt, targetModel, targetApiKeys);
+        String content = zju.cst.aces.api.impl.ChatGenerator.getContentByResponse(response);
         config.getLogger().debug("[Response]:\n" + content);
         String code = ChatGenerator.extractCodeByContent(content);
 

@@ -31,6 +31,14 @@ public class ChatGenerator implements Generator {
         return response;
     }
 
+    public static ChatResponse chat(Config config, List<ChatMessage> chatMessages, zju.cst.aces.api.config.Model model, String[] apiKeys) {
+        ChatResponse response = new AskGPT(config).askChatGPT(chatMessages, model, apiKeys);
+        if (response == null) {
+            throw new RuntimeException("Response is null, failed to get response.");
+        }
+        return response;
+    }
+
     public static String extractCodeByResponse(ChatResponse response) {
         return new CodeExtractor(getContentByResponse(response)).getExtractedCode();
     }
