@@ -1,0 +1,4 @@
+--2026-05-08 15:42:50--  https://huggingface.co/datasets/defects4j/defects4j-repos/resolve/main/defects4j-repos.zip
+Resolving huggingface.co (huggingface.co)... 108.160.165.212, 2a03:2880:f10d:183:face:b00c:0:25de
+Connecting to huggingface.co (huggingface.co)|108.160.165.212|:443... failed: Connection timed out.
+Connecting to huggingface.co (huggingface.co)|2a03:2880:f10d:183:face:b00c:0:25de|:443... failed: Network is unreachable.

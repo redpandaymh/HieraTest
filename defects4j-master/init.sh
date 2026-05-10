@@ -119,41 +119,9 @@ main() {
     # Download build system dependencies
     #
     echo
-    echo "Setting up Gradle dependencies ... "
-
-    cd "$DIR_LIB_GRADLE"
-
-    GRADLE_DISTS_ZIP=defects4j-gradle-dists-v3.zip
-    GRADLE_DEPS_ZIP=defects4j-gradle-deps-v3.zip
-
-    old_dists_ts=0
-    old_deps_ts=0
-
-    if [ -e $GRADLE_DISTS_ZIP ]; then
-        old_dists_ts=$(get_modification_timestamp $GRADLE_DISTS_ZIP)
-    fi
-    if [ -e $GRADLE_DEPS_ZIP ]; then
-        old_deps_ts=$(get_modification_timestamp $GRADLE_DEPS_ZIP)
-    fi
-
-    # Only download archive if the server has a newer file
-    download_url $HOST_URL/$GRADLE_DISTS_ZIP
-    download_url $HOST_URL/$GRADLE_DEPS_ZIP
-    new_dists_ts=$(get_modification_timestamp $GRADLE_DISTS_ZIP)
-    new_deps_ts=$(get_modification_timestamp $GRADLE_DEPS_ZIP)
-
-    # Update gradle distributions/dependencies if a newer archive was available
-    [ "$old_dists_ts" != "$new_dists_ts" ] && mkdir "dists" && unzip -q -u $GRADLE_DISTS_ZIP -d "dists"
-    [ "$old_deps_ts" != "$new_deps_ts" ] && unzip -q -u $GRADLE_DEPS_ZIP
-
-    cd "$BASE"
-
-    ############################################################################
-    #
-    # Download utility programs
-    #
+    echo "Skipping Gradle dependencies ... "
     echo
-    echo "Setting up utility programs ... "
+    echo "Setting up utility programs
 
     BUILD_ANALYZER_VERSION="0.0.1"
     BUILD_ANALYZER_JAR=build-analyzer-$BUILD_ANALYZER_VERSION.jar
